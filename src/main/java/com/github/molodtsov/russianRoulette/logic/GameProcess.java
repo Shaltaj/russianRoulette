@@ -53,4 +53,7 @@ public class GameProcess {
         return game;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

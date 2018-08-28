@@ -3,9 +3,9 @@ package com.github.molodtsov.russianRoulette.model;
 import com.github.molodtsov.russianRoulette.logic.RandomPosition;
 
 public class Game {
-    private final Player player1;
+    private Player player1;
     private Player player2;
-    private final int bulletPosition;
+    private int bulletPosition;
     private String log;
     private Player winner;
     private Player looser;
@@ -16,6 +16,9 @@ public class Game {
         this.bulletPosition = RandomPosition.GetRandomPosition();
         this.gameClosed = false;
         this.log = "";
+    }
+
+    public Game() {
     }
 
     public void setPlayer2(Player player2) {
@@ -66,4 +69,6 @@ public class Game {
     public void setGameClosed(Boolean gameClosed) {
         this.gameClosed = gameClosed;
     }
+
+
 }
