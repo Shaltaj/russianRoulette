@@ -19,10 +19,6 @@ public class Player {
     private int win;
     @Column
     private int lose;
-    @OneToMany(mappedBy = "Player1", fetch = FetchType.LAZY)
-    private List<Game> hostGames;
-    @OneToMany(mappedBy = "Player2", fetch = FetchType.LAZY)
-    private List<Game> guestGames;
 
     //CONSTRUCTORS
 
@@ -86,22 +82,6 @@ public class Player {
 
     public int getLose() {
         return lose;
-    }
-
-    public List<Game> getHostGames() {
-        return hostGames;
-    }
-
-    public void setHostGames(List<Game> hostGames) {
-        this.hostGames = hostGames;
-    }
-
-    public List<Game> getGuestGames() {
-        return guestGames;
-    }
-
-    public void setGuestGames(List<Game> guestGames) {
-        this.guestGames = guestGames;
     }
 
 //ADDITIONAL LOGIC
