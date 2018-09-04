@@ -10,4 +10,5 @@ public interface GameDAO {
     Game JoinGame(Player player);
     Game CurrentGame(Player player);
     List<Game> FindGames();
+    void Add(Game game);
 }

@@ -1,14 +1,26 @@
 package com.github.molodtsov.russianRoulette.model;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "PLAYERS")
 public class Player {
+    @Column(length = 50)
     private String name;
+    @Id
+    @Column(length = 20)
     private String login;
+    @Column(length = 20)
     private String password;
+    @Column
     private int money;
+    @Column
     private int win;
+    @Column
     private int lose;
 
-
+    //CONSTRUCTORS
 
     public Player(String name, String login, String password) {
         this.name = name;
@@ -21,6 +33,8 @@ public class Player {
 
     public Player() {
     }
+
+    //GETTERS & SETTERS
 
     public String getName() {
         return name;
@@ -66,12 +80,14 @@ public class Player {
         this.lose = lose;
     }
 
-    public void addWin() {
-        this.win ++;
-    }
-
     public int getLose() {
         return lose;
+    }
+
+//ADDITIONAL LOGIC
+
+    public void addWin() {
+        this.win ++;
     }
 
     public void addLose() {

@@ -8,4 +8,5 @@ public interface PlayerDAO {
     Player SignInPlayer(String login, String password);
     Player RegisterPlayer(String name, String login, String password);
     List<Player> TopPlayers(int count);
+    void Add(Player player);
 }
