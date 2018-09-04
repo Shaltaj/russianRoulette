@@ -12,13 +12,6 @@ public class GameProcessTest {
         Player player1 = new Player("name1", "login1", "password1");
         Player player2 = new Player("name2", "login2", "password2");
 
-        //How can i test in junit IllegalArgumentException?
-        //https://stackoverflow.com/questions/19217588/illegalargumentexception-class-as-expected-in-junit
-
-        //[TODO] Test when Player1 is empty
-        //[TODO] Test when Player2 is empty
-        //[TODO] Test when Player2=Player1 is empty
-
         Game game = new Game(player1);
         game.setPlayer2(player2);
 

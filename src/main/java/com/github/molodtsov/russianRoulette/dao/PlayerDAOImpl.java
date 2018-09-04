@@ -21,11 +21,25 @@ public class PlayerDAOImpl implements PlayerDAO {
                 .getSingleResult();
     }
 
+    //[TODO] RegisterPlayer
     @Override
     public Player RegisterPlayer(String name, String login, String password) {
-        return null;
+        if (name.equals("")) {
+            throw new IllegalArgumentException("Name shouldn't be empty");
+        }
+        if (login.equals("")) {
+            throw new IllegalArgumentException("Login shouldn't be empty");
+        }
+        if (password.equals("")) {
+            throw new IllegalArgumentException("Password shouldn't be empty");
+        }
+        Player player = new Player(name, login, password);
+        Add(player);
+
+        return player;
     }
 
+    //[TODO] TopPlayers
     @Override
     public List<Player> TopPlayers(int count) {
         return null;
