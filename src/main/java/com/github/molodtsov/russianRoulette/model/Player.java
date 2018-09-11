@@ -1,7 +1,6 @@
 package com.github.molodtsov.russianRoulette.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "PLAYERS")

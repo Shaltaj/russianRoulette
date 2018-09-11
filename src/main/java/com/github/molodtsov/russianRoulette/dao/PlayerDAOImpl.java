@@ -3,6 +3,7 @@ package com.github.molodtsov.russianRoulette.dao;
 import com.github.molodtsov.russianRoulette.model.Player;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
@@ -15,13 +16,17 @@ public class PlayerDAOImpl implements PlayerDAO {
 
     @Override
     public Player SignInPlayer(String login, String password) {
-        return em.createQuery("SELECT p FROM Player p WHERE p.login = :login and p.password = :password", Player.class)
-                .setParameter("login", login)
-                .setParameter("password", password)
-                .getSingleResult();
+        try {
+
+            return em.createQuery("SELECT p FROM Player p WHERE p.login = :login and p.password = :password", Player.class)
+                    .setParameter("login", login)
+                    .setParameter("password", password)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
-    //[TODO] RegisterPlayer
     @Override
     public Player RegisterPlayer(String name, String login, String password) {
         if (name.equals("")) {
@@ -34,19 +39,21 @@ public class PlayerDAOImpl implements PlayerDAO {
             throw new IllegalArgumentException("Password shouldn't be empty");
         }
         Player player = new Player(name, login, password);
-        Add(player);
+        UpdatePlayer(player);
 
         return player;
     }
 
-    //[TODO] TopPlayers
     @Override
     public List<Player> TopPlayers(int count) {
-        return null;
+        return em.createQuery("SELECT p FROM Player p ORDER BY p.money desc", Player.class)
+                .setFirstResult(0)
+                .setMaxResults(count)
+                .getResultList();
     }
 
     @Override
-    public void Add(Player player) {
+    public void UpdatePlayer(Player player) {
         em.getTransaction().begin();
         try {
             em.persist(player);
@@ -59,4 +66,5 @@ public class PlayerDAOImpl implements PlayerDAO {
         }
 
     }
+
 }
