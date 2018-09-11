@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface GameDAO {
     Game HostGame(Player player);
-    Game JoinGame(Player player);
+    void JoinGame(Game game, Player player);
     Game CurrentGame(Player player);
-    List<Game> FindGames();
-    void Add(Game game);
+    List<Game> FindGames(int count);
+    void UpdateGame(Game game);
 }

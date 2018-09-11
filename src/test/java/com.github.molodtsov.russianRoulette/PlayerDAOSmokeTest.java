@@ -37,7 +37,7 @@ public class PlayerDAOSmokeTest {
     }
 
     @Test
-    public void playerAddTest() {
+    public void UpdatePlayerTest() {
         PlayerDAO playerDAO = new PlayerDAOImpl(em);
         Player player = new Player("name1", "login1", "password1");
         playerDAO.UpdatePlayer(player);
@@ -152,11 +152,4 @@ public class PlayerDAOSmokeTest {
 
     }
 
-    //[TODO] JoinGame
-
-    //[TODO] CurrentGame
-
-    //[TODO] FindGames
-
-    //[TODO] Add game
 }
