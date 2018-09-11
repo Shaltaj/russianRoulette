@@ -1,46 +1,28 @@
 package com.github.molodtsov.russianRoulette;
 
-import com.github.molodtsov.russianRoulette.dao.GameDAO;
 import com.github.molodtsov.russianRoulette.dao.GameDAOImpl;
 import com.github.molodtsov.russianRoulette.dao.PlayerDAOImpl;
 import com.github.molodtsov.russianRoulette.model.Game;
 import com.github.molodtsov.russianRoulette.model.Player;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
 import java.util.List;
 
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GameDAOSmokeTest {
-    private EntityManagerFactory emf;
+    @Autowired
     private EntityManager em;
-
-    @Before
-    public void setup() {
-        emf = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        em = emf.createEntityManager();
-
-    }
-
-    @After
-    public void after() {
-        if (em!=null) {
-            em.close();
-        }
-        if (emf!=null) {
-            emf.close();
-        }
-    }
 
     //UpdateGame
     @Test
     public void UpdateGameTest(){
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
         Game game = new Game();
         gameDAO.UpdateGame(game);
         Assert.assertEquals(game, em.find(Game.class, game.getId()));
@@ -50,10 +32,10 @@ public class GameDAOSmokeTest {
     //CurrentGame
     @Test
     public void CurrentGameSuccessTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
 
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
         Game game = new Game(player);
         gameDAO.UpdateGame(game);
 
@@ -62,10 +44,10 @@ public class GameDAOSmokeTest {
 
     @Test
     public void CurrentGameClosedTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
 
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
         Game game = new Game(player);
         game.setGameClosed(true);
         gameDAO.UpdateGame(game);
@@ -76,10 +58,10 @@ public class GameDAOSmokeTest {
 
     @Test
     public void CurrentGameEmptyTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
 
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
 
 
         Assert.assertNull(gameDAO.CurrentGame(player));
@@ -90,10 +72,10 @@ public class GameDAOSmokeTest {
     //HostGame
     @Test
     public void HostGameSuccessTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
 
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
         Game game = gameDAO.HostGame(player);
         Assert.assertEquals(game, gameDAO.CurrentGame(player));
 
@@ -101,10 +83,10 @@ public class GameDAOSmokeTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void HostGameDuplicateTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
 
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
         gameDAO.HostGame(player);
         gameDAO.HostGame(player);
     }
@@ -112,8 +94,8 @@ public class GameDAOSmokeTest {
     //JoinGame
     @Test
     public void JoinGameSuccessTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
+        GameDAOImpl gameDAO = new GameDAOImpl();
 
         Player player1 = playerDAO.RegisterPlayer("name", "login", "password");
         Game game = gameDAO.HostGame(player1);
@@ -126,8 +108,8 @@ public class GameDAOSmokeTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void JoinGameDuplicateTest(){
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
+        GameDAOImpl gameDAO = new GameDAOImpl();
 
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
         Game game = gameDAO.HostGame(player);
@@ -137,8 +119,8 @@ public class GameDAOSmokeTest {
     //FindGames
     @Test
     public void FindGamesListTest() {
-        PlayerDAOImpl playerDAO = new PlayerDAOImpl(em);
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        PlayerDAOImpl playerDAO = new PlayerDAOImpl();
+        GameDAOImpl gameDAO = new GameDAOImpl();
         for (int i = 1; i <= 20; i++) {
             Player player = playerDAO.RegisterPlayer("name"+i, "login"+i, "password"+i);
             Game game = gameDAO.HostGame(player);
@@ -161,7 +143,7 @@ public class GameDAOSmokeTest {
 
     @Test //(expected = EntityExistsException.class)
     public void FindGamesEmptyListTest() {
-        GameDAOImpl gameDAO = new GameDAOImpl(em);
+        GameDAOImpl gameDAO = new GameDAOImpl();
         List<Game> listGame = gameDAO.FindGames(10);
         Assert.assertEquals(0, listGame.size());
     }

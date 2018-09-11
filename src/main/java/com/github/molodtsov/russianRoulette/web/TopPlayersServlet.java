@@ -18,7 +18,7 @@ import java.util.List;
 
 @WebServlet(urlPatterns = {"/players/top"})
 public class TopPlayersServlet extends HttpServlet {
-    private PlayerDAO playerDAO = new PlayerDAOImpl(ApplicationListener.getEntityManager());
+    private PlayerDAO playerDAO = new PlayerDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

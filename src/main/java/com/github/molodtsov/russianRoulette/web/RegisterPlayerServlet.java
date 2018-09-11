@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/players/register")
 public class RegisterPlayerServlet extends HttpServlet {
-    private PlayerDAO playerDAO = new PlayerDAOImpl(ApplicationListener.getEntityManager());
+    private PlayerDAO playerDAO = new PlayerDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

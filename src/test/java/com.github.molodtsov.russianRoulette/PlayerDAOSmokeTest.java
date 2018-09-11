@@ -1,44 +1,31 @@
 package com.github.molodtsov.russianRoulette;
 
 import com.github.molodtsov.russianRoulette.dao.PlayerDAO;
-import com.github.molodtsov.russianRoulette.dao.PlayerDAOImpl;
 import com.github.molodtsov.russianRoulette.model.Player;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class PlayerDAOSmokeTest {
-    private EntityManagerFactory emf;
+    @Autowired
     private EntityManager em;
-
-    @Before
-    public void setup() {
-        emf = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        em = emf.createEntityManager();
-
-    }
-
-    @After
-    public void after() {
-        if (em!=null) {
-            em.close();
-        }
-        if (emf!=null) {
-            emf.close();
-        }
-
-    }
+    @Autowired
+    private PlayerDAO playerDAO;
 
     @Test
     public void UpdatePlayerTest() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         Player player = new Player("name1", "login1", "password1");
         playerDAO.UpdatePlayer(player);
 
@@ -47,7 +34,7 @@ public class PlayerDAOSmokeTest {
 
     @Test
     public void SignInTestSuccess() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
         Player playerSI = playerDAO.SignInPlayer("login", "password");
         Assert.assertEquals(player, playerSI);
@@ -56,8 +43,8 @@ public class PlayerDAOSmokeTest {
 
     @Test
     public void SignInTestWrongLogin() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
-        Player player = playerDAO.RegisterPlayer("name", "login", "password");
+
+        playerDAO.RegisterPlayer("name", "login", "password");
         Player playerSI = playerDAO.SignInPlayer("login1", "password");
         Assert.assertNull(playerSI);
 
@@ -65,8 +52,8 @@ public class PlayerDAOSmokeTest {
 
     @Test
     public void SignInTestWrongPassword() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
-        Player player = playerDAO.RegisterPlayer("name", "login", "password");
+
+        playerDAO.RegisterPlayer("name", "login", "password");
         Player playerSI = playerDAO.SignInPlayer("login", "password1");
         Assert.assertNull(playerSI);
 
@@ -74,7 +61,7 @@ public class PlayerDAOSmokeTest {
 
     @Test
     public void RegisterPlayerTestNew() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         Player player = playerDAO.RegisterPlayer("name", "login", "password");
         player.setMoney(1);
         player.setLose(2);
@@ -93,34 +80,34 @@ public class PlayerDAOSmokeTest {
 
     @Test (expected = EntityExistsException.class)
     public void RegisterPlayerTestDuplicate() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         playerDAO.RegisterPlayer("name", "login", "password");
         playerDAO.RegisterPlayer("name1", "login", "password1");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void RegisterPlayerTestEmptyName() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         playerDAO.RegisterPlayer("", "login", "password");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void RegisterPlayerTestEmptyLogin() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         playerDAO.RegisterPlayer("name", "", "password");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void RegisterPlayerTestEmptyPassword() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         playerDAO.RegisterPlayer("name", "login", "");
     }
 
     @Test
     public void TopPlayersListTest() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         for (int i = 1; i <= 10; i++) {
-            Player player = playerDAO.RegisterPlayer("name"+i, "login"+i, "password"+i);
+            playerDAO.RegisterPlayer("name"+i, "login"+i, "password"+i);
         }
         List<Player> plListPersist = playerDAO.TopPlayers(10);
         Assert.assertEquals(10, plListPersist.size());
@@ -135,7 +122,7 @@ public class PlayerDAOSmokeTest {
 
     @Test
     public void TopPlayersOrderTest() {
-        PlayerDAO playerDAO = new PlayerDAOImpl(em);
+
         List<Player> playerList = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             Player player = playerDAO.RegisterPlayer("name"+i, "login"+i, "password"+i);

@@ -1,11 +1,14 @@
 package com.github.molodtsov.russianRoulette.logic;
 
 import com.github.molodtsov.russianRoulette.model.Game;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GameProcess {
     private Game game;
 
-
+    @Autowired
     public GameProcess(Game game) {
         this.game = game;
     }

@@ -1,18 +1,18 @@
 package com.github.molodtsov.russianRoulette.dao;
 
 import com.github.molodtsov.russianRoulette.model.Player;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
+@Service
 public class PlayerDAOImpl implements PlayerDAO {
+    @Autowired
     private EntityManager em;
-
-    public PlayerDAOImpl(EntityManager em) {
-        this.em = em;
-    }
 
     @Override
     public Player SignInPlayer(String login, String password) {
