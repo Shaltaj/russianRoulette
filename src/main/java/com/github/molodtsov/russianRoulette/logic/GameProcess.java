@@ -1,13 +1,17 @@
 package com.github.molodtsov.russianRoulette.logic;
 
+import com.github.molodtsov.russianRoulette.dao.GameDAO;
+import com.github.molodtsov.russianRoulette.dao.PlayerDAO;
 import com.github.molodtsov.russianRoulette.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class GameProcess {
     private Game game;
 
+    @Autowired
     public GameProcess(Game game) {
         this.game = game;
     }

@@ -9,7 +9,7 @@ import javax.persistence.NoResultException;
 import java.util.List;
 
 @Service
-public class PlayerDAOImpl extends UpdateObject<Player> implements PlayerDAO {
+public class PlayerDAOImpl extends UpdateDAOImpl<Player> implements PlayerDAO {
     @Autowired
     public PlayerDAOImpl(EntityManager em) {
         super(em);
@@ -55,7 +55,7 @@ public class PlayerDAOImpl extends UpdateObject<Player> implements PlayerDAO {
 
     @Override
     public void updatePlayer(Player player) {
-        update(player);
+        updatePersist(player);
 
     }
 

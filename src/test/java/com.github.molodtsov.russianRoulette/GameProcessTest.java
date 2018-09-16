@@ -1,12 +1,22 @@
 package com.github.molodtsov.russianRoulette;
 
+import com.github.molodtsov.russianRoulette.dao.GameDAO;
+import com.github.molodtsov.russianRoulette.dao.GameDAOImpl;
+import com.github.molodtsov.russianRoulette.dao.PlayerDAO;
+import com.github.molodtsov.russianRoulette.dao.PlayerDAOImpl;
 import com.github.molodtsov.russianRoulette.logic.GameProcess;
 import com.github.molodtsov.russianRoulette.model.Game;
 import com.github.molodtsov.russianRoulette.model.Player;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 public class GameProcessTest {
+
     @Test
     public void GameProcessSuccessTest() {
         Player player1 = new Player("name1", "login1", "password1");

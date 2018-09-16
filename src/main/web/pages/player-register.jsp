@@ -1,5 +1,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<jsp:useBean id="formBean" beanName="formBean" scope="request" type="com.github.molodtsov.russianRoulette.web.RegisterPlayerFormBean"/>
 <html>
 <head>
     <title>Register player</title>
@@ -7,22 +9,29 @@
 <body>
     <h1>Register new player</h1>
 
-    <form action="/players/register" method="post" enctype="application/x-www-form-urlencoded">
+    <%--@elvariable id="formBean" type="com.github.molodtsov.russianRoulette.web.RegisterPlayerFormBean"--%>
+    <form:form action="/players/register"
+               method="post"
+               enctype="application/x-www-form-urlencoded"
+               modelAttribute="formBean">
         <p>
-            Name: <input type="text" name="name">
+            Name: <form:input type="text" path="name"/>
+            <form:errors path="name"/>
 
         </p>
         <p>
-            Login: <input type="text" name="login">
+            Login: <form:input type="text" path="login"/>
+            <form:errors path="login"/>
 
         </p>
         <p>
-            Password: <input type="password" name="password">
+            Password: <form:input type="password" path="password"/>
+            <form:errors path="password"/>
         </p>
         <p>
             <input type="submit"/>
         </p>
-    </form>
+    </form:form>
 
 </body>
 </html>

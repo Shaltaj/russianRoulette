@@ -4,10 +4,12 @@ import com.github.molodtsov.russianRoulette.dao.PlayerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.PersistenceException;
+import javax.validation.Valid;
 
 @Controller
 public class PlayersController {
@@ -27,30 +29,41 @@ public class PlayersController {
         return "player-top-list";
     }
 
+    @ModelAttribute("formBean")
+    public RegisterPlayerFormBean createFormBean() {
+        return new RegisterPlayerFormBean();
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/players/register")
     public String registerPlayerFormGet(ModelMap model) {
         return "player-register";
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/players/register")
-    public String registerPlayerFormPost(@RequestParam String name,
-                                         @RequestParam String login,
-                                         @RequestParam String password,
-                                         @RequestHeader("User-Agent") String userAgent,
-                                         ModelMap model) {
+    public String registerPlayerFormPost(@Valid @ModelAttribute("formBean") RegisterPlayerFormBean formBean,
+                                         BindingResult binding) {
 
-        if (name == null) {
-            throw new IllegalArgumentException("name missing");
-        }
-        if (login == null) {
-            throw new IllegalArgumentException("login missing");
-        }
-        if (password == null) {
-            throw new IllegalArgumentException("password missing");
-        }
-        playerDAO.registerPlayer(name, login, password);
+//        if (formBean.getName().isEmpty()) {
+//            binding.addError(new FieldError("formBean", "name", "name is empty"));
+//        }
+//        if (formBean.getLogin().isEmpty()) {
+//            binding.addError(new FieldError("formBean", "login", "login is empty"));
+//        }
+//        if (formBean.getPassword().isEmpty()) {
+//            binding.addError(new FieldError("formBean", "password", "password is empty"));
+//        }
+        if (binding.hasErrors()) {
+            return "player-register";
 
-        return topPlayerFormGet(userAgent, model);
+        }
+        try {
+            playerDAO.registerPlayer(formBean.getName(), formBean.getLogin(), formBean.getPassword());
+        } catch (PersistenceException e) {
+            binding.addError(new FieldError("formBean", "login", "login already exist"));
+            return "player-register";
+        }
+
+        return "redirect:/players/top";
     }
 
 }

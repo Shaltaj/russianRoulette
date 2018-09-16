@@ -1,5 +1,6 @@
 package com.github.molodtsov.russianRoulette.web;
 
+import com.github.molodtsov.russianRoulette.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,6 +34,10 @@ public class ProdConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public Game getGame() {
+        return new Game();
+    }
+    @Bean
     public ViewResolver getViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver("/pages/", ".jsp");
         resolver.setViewClass(JstlView.class);
@@ -51,4 +56,5 @@ public class ProdConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/styles/*.css")
                 .addResourceLocations("/styles/");
     }
+
 }
