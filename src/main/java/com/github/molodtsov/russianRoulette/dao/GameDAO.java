@@ -6,9 +6,9 @@ import com.github.molodtsov.russianRoulette.model.Player;
 import java.util.List;
 
 public interface GameDAO {
-    Game HostGame(Player player);
-    void JoinGame(Game game, Player player);
-    Game CurrentGame(Player player);
-    List<Game> FindGames(int count);
-    void UpdateGame(Game game);
+    Game hostGame(Player player);
+    void joinGame(Game game, Player player);
+    Game currentGame(Player player);
+    List<Game> findGames(int count);
+    void updateGame(Game game);
 }

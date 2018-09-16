@@ -7,36 +7,39 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import java.util.List;
 
 @Service
-public class GameDAOImpl implements GameDAO {
+public class GameDAOImpl extends UpdateObject<Game> implements GameDAO {
+
     @Autowired
-    private EntityManager em;
+    public GameDAOImpl(EntityManager em) {
+        super(em);
+    }
+
 
     @Override
-    public Game HostGame(Player player) {
-        if (CurrentGame(player) != null) {
+    public Game hostGame(Player player) {
+        if (currentGame(player) != null) {
             throw new IllegalArgumentException("Current game already exist");
         }
         Game game = new Game(player);
-        UpdateGame(game);
+        updateGame(game);
         return game;
     }
 
     @Override
-    public void JoinGame(Game game, Player player) {
-        if (CurrentGame(player) != null) {
+    public void joinGame(Game game, Player player) {
+        if (currentGame(player) != null) {
             throw new IllegalArgumentException("Current game already exist");
         }
         game.setPlayer2(player);
-        UpdateGame(game);
+        updateGame(game);
 
     }
 
     @Override
-    public Game CurrentGame(Player player) {
+    public Game currentGame(Player player) {
         try {
             return em.createQuery("SELECT g FROM GAMES g WHERE (g.player1 = :player or g.player2 = :player) and g.gameClosed = false", Game.class)
                     .setParameter("player", player)
@@ -47,7 +50,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public List<Game> FindGames(int count) {
+    public List<Game> findGames(int count) {
         return em.createQuery("SELECT g FROM GAMES g WHERE g.gameClosed = false", Game.class)
                 .setFirstResult(0)
                 .setMaxResults(count)
@@ -55,17 +58,8 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void UpdateGame(Game game) {
-        em.getTransaction().begin();
-        try {
-            em.persist(game);
-            em.getTransaction().commit();
-
-        } catch (PersistenceException e){
-            em.getTransaction().rollback();
-            throw e;
-
-        }
+    public void updateGame(Game game) {
+        update(game);
     }
 
 

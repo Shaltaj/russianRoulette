@@ -27,7 +27,7 @@ public class PlayerDAOSmokeTest {
     public void UpdatePlayerTest() {
 
         Player player = new Player("name1", "login1", "password1");
-        playerDAO.UpdatePlayer(player);
+        playerDAO.updatePlayer(player);
 
         Assert.assertEquals(player, em.find(Player.class, "login1"));
     }
@@ -35,8 +35,8 @@ public class PlayerDAOSmokeTest {
     @Test
     public void SignInTestSuccess() {
 
-        Player player = playerDAO.RegisterPlayer("name", "login", "password");
-        Player playerSI = playerDAO.SignInPlayer("login", "password");
+        Player player = playerDAO.registerPlayer("name", "login", "password");
+        Player playerSI = playerDAO.signInPlayer("login", "password");
         Assert.assertEquals(player, playerSI);
 
     }
@@ -44,8 +44,8 @@ public class PlayerDAOSmokeTest {
     @Test
     public void SignInTestWrongLogin() {
 
-        playerDAO.RegisterPlayer("name", "login", "password");
-        Player playerSI = playerDAO.SignInPlayer("login1", "password");
+        playerDAO.registerPlayer("name", "login", "password");
+        Player playerSI = playerDAO.signInPlayer("login1", "password");
         Assert.assertNull(playerSI);
 
     }
@@ -53,8 +53,8 @@ public class PlayerDAOSmokeTest {
     @Test
     public void SignInTestWrongPassword() {
 
-        playerDAO.RegisterPlayer("name", "login", "password");
-        Player playerSI = playerDAO.SignInPlayer("login", "password1");
+        playerDAO.registerPlayer("name", "login", "password");
+        Player playerSI = playerDAO.signInPlayer("login", "password1");
         Assert.assertNull(playerSI);
 
     }
@@ -62,11 +62,11 @@ public class PlayerDAOSmokeTest {
     @Test
     public void RegisterPlayerTestNew() {
 
-        Player player = playerDAO.RegisterPlayer("name", "login", "password");
+        Player player = playerDAO.registerPlayer("name", "login", "password");
         player.setMoney(1);
         player.setLose(2);
         player.setWin(3);
-        playerDAO.UpdatePlayer(player);
+        playerDAO.updatePlayer(player);
         Player plPersist = em.find(Player.class, "login");
 
         Assert.assertEquals(player, plPersist);
@@ -81,41 +81,41 @@ public class PlayerDAOSmokeTest {
     @Test (expected = EntityExistsException.class)
     public void RegisterPlayerTestDuplicate() {
 
-        playerDAO.RegisterPlayer("name", "login", "password");
-        playerDAO.RegisterPlayer("name1", "login", "password1");
+        playerDAO.registerPlayer("name", "login", "password");
+        playerDAO.registerPlayer("name1", "login", "password1");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void RegisterPlayerTestEmptyName() {
 
-        playerDAO.RegisterPlayer("", "login", "password");
+        playerDAO.registerPlayer("", "login", "password");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void RegisterPlayerTestEmptyLogin() {
 
-        playerDAO.RegisterPlayer("name", "", "password");
+        playerDAO.registerPlayer("name", "", "password");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void RegisterPlayerTestEmptyPassword() {
 
-        playerDAO.RegisterPlayer("name", "login", "");
+        playerDAO.registerPlayer("name", "login", "");
     }
 
     @Test
     public void TopPlayersListTest() {
 
         for (int i = 1; i <= 10; i++) {
-            playerDAO.RegisterPlayer("name"+i, "login"+i, "password"+i);
+            playerDAO.registerPlayer("name"+i, "login"+i, "password"+i);
         }
-        List<Player> plListPersist = playerDAO.TopPlayers(10);
+        List<Player> plListPersist = playerDAO.topPlayers(10);
         Assert.assertEquals(10, plListPersist.size());
 
-        plListPersist = playerDAO.TopPlayers(9);
+        plListPersist = playerDAO.topPlayers(9);
         Assert.assertEquals(9, plListPersist.size());
 
-        plListPersist = playerDAO.TopPlayers(11);
+        plListPersist = playerDAO.topPlayers(11);
         Assert.assertEquals(10, plListPersist.size());
 
     }
@@ -125,13 +125,13 @@ public class PlayerDAOSmokeTest {
 
         List<Player> playerList = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
-            Player player = playerDAO.RegisterPlayer("name"+i, "login"+i, "password"+i);
+            Player player = playerDAO.registerPlayer("name"+i, "login"+i, "password"+i);
             player.setMoney(i*10);
-            playerDAO.UpdatePlayer(player);
+            playerDAO.updatePlayer(player);
 
             playerList.add(player);
         }
-        List<Player> plListPersist = playerDAO.TopPlayers(10);
+        List<Player> plListPersist = playerDAO.topPlayers(10);
         for (int i = 1; i <= 10; i++) {
             Assert.assertEquals(playerList.get(i-1), plListPersist.get(10-i));
         }

@@ -4,16 +4,15 @@ import com.github.molodtsov.russianRoulette.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class GameProcess {
     private Game game;
 
-    @Autowired
     public GameProcess(Game game) {
         this.game = game;
     }
 
-    public void Proceed() {
+    public void proceed() {
         if (game.getPlayer1() == null) {
             throw new IllegalArgumentException("Player1 shouldn't be empty");
         }
@@ -30,7 +29,7 @@ public class GameProcess {
         int curPlayerInd = 0;
         game.setLog("bullet position is "+game.getBulletPosition());
         while (!game.getGameClosed()) {
-            int curPosition = RandomPosition.GetRandomPosition();
+            int curPosition = RandomPosition.getRandomPosition();
             game.setLog(game.getLog().concat(System.lineSeparator())
                     + "Current Player is " + (curPlayerInd == 0 ? game.getPlayer1() : game.getPlayer2())
                     + ", current position is "+curPosition);

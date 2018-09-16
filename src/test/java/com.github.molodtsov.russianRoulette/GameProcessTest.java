@@ -16,7 +16,7 @@ public class GameProcessTest {
         game.setPlayer2(player2);
 
         GameProcess gameProcess = new GameProcess(game);
-        gameProcess.Proceed();
+        gameProcess.proceed();
 
         Assert.assertNotNull(game.getWinner());
         Assert.assertNotNull(game.getLooser());
@@ -31,7 +31,7 @@ public class GameProcessTest {
     public void GameProcessEmptyPlayer1Test() {
         Game game = new Game();
         GameProcess gameProcess = new GameProcess(game);
-        gameProcess.Proceed();
+        gameProcess.proceed();
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -39,7 +39,7 @@ public class GameProcessTest {
         Player player1 = new Player("name1", "login1", "password1");
         Game game = new Game(player1);
         GameProcess gameProcess = new GameProcess(game);
-        gameProcess.Proceed();
+        gameProcess.proceed();
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -48,7 +48,7 @@ public class GameProcessTest {
         Game game = new Game(player1);
         game.setPlayer2(player1);
         GameProcess gameProcess = new GameProcess(game);
-        gameProcess.Proceed();
+        gameProcess.proceed();
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -62,7 +62,7 @@ public class GameProcessTest {
         game.setBulletPosition(-1);
 
         GameProcess gameProcess = new GameProcess(game);
-        gameProcess.Proceed();
+        gameProcess.proceed();
     }
 
     @Test

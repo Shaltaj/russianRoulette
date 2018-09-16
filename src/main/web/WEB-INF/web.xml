@@ -17,7 +17,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>ru.levelp.example.web.ProdConfiguration</param-value>
+            <param-value>com.github.molodtsov.russianRoulette.web.ProdConfiguration</param-value>
         </init-param>
 
         <load-on-startup>1</load-on-startup>

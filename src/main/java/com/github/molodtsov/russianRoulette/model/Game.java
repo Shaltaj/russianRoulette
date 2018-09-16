@@ -28,7 +28,7 @@ public class Game {
 
     public Game(Player player1) {
         this.player1 = player1;
-        this.bulletPosition = RandomPosition.GetRandomPosition();
+        this.bulletPosition = RandomPosition.getRandomPosition();
         this.gameClosed = false;
         this.log = "";
     }

@@ -6,16 +6,17 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import java.util.List;
 
 @Service
-public class PlayerDAOImpl implements PlayerDAO {
+public class PlayerDAOImpl extends UpdateObject<Player> implements PlayerDAO {
     @Autowired
-    private EntityManager em;
+    public PlayerDAOImpl(EntityManager em) {
+        super(em);
+    }
 
     @Override
-    public Player SignInPlayer(String login, String password) {
+    public Player signInPlayer(String login, String password) {
         try {
 
             return em.createQuery("SELECT p FROM Player p WHERE p.login = :login and p.password = :password", Player.class)
@@ -28,7 +29,7 @@ public class PlayerDAOImpl implements PlayerDAO {
     }
 
     @Override
-    public Player RegisterPlayer(String name, String login, String password) {
+    public Player registerPlayer(String name, String login, String password) {
         if (name.equals("")) {
             throw new IllegalArgumentException("Name shouldn't be empty");
         }
@@ -39,13 +40,13 @@ public class PlayerDAOImpl implements PlayerDAO {
             throw new IllegalArgumentException("Password shouldn't be empty");
         }
         Player player = new Player(name, login, password);
-        UpdatePlayer(player);
+        updatePlayer(player);
 
         return player;
     }
 
     @Override
-    public List<Player> TopPlayers(int count) {
+    public List<Player> topPlayers(int count) {
         return em.createQuery("SELECT p FROM Player p ORDER BY p.money desc", Player.class)
                 .setFirstResult(0)
                 .setMaxResults(count)
@@ -53,17 +54,8 @@ public class PlayerDAOImpl implements PlayerDAO {
     }
 
     @Override
-    public void UpdatePlayer(Player player) {
-        em.getTransaction().begin();
-        try {
-            em.persist(player);
-            em.getTransaction().commit();
-
-        } catch (PersistenceException e){
-            em.getTransaction().rollback();
-            throw e;
-
-        }
+    public void updatePlayer(Player player) {
+        update(player);
 
     }
 

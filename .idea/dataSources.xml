@@ -21,5 +21,15 @@
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:./target/h2-1</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ProdPersistenceUnit/Hibernate" uuid="751430b1-ede9-4045-9e5c-dd42569b0276">
+      <driver-ref>h2.unified</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate
+
+/Users/viktor_molodtsov/IdeaProjects/russianRoulette/src/main/resources/META-INF/persistence.xml</remarks>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:./target/h2-1</jdbc-url>
+    </data-source>
   </component>
 </project>

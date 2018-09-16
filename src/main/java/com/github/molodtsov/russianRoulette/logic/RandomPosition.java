@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class RandomPosition {
 
-    public static int GetRandomPosition() {
+    public static int getRandomPosition() {
 
         Random r = new Random();
         OptionalInt oi = r.ints(1, 7).findFirst();
